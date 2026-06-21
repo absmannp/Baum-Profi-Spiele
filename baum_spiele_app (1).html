@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Baum-Profi Spiele</title>
+<style>
+  :root{
+    --green:#2f7d32; --light:#eaf7df; --leaf:#73b74a; --brown:#8b5a2b; --sun:#ffd166; --blue:#71c7ec; --cream:#fff8e6; --wrong:#ffdddd; --right:#dff7df;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Comic Sans MS","Trebuchet MS",Arial,sans-serif;background:linear-gradient(#dff6ff,#f9ffe9);color:#24421f;min-height:100vh}
+  header{background:linear-gradient(135deg,var(--green),#69b34c);color:white;text-align:center;padding:24px 15px;border-bottom:8px solid var(--brown);box-shadow:0 4px 12px #0002}
+  header h1{margin:0;font-size:clamp(2rem,5vw,3.4rem);text-shadow:2px 2px #0003} header p{margin:8px 0 0;font-size:1.1rem}
+  .wrap{max-width:1100px;margin:auto;padding:22px}.screen{display:none}.screen.active{display:block}.hero{background:var(--cream);border:4px solid #b7d58b;border-radius:28px;padding:22px;box-shadow:0 8px 16px #0001}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-top:20px}.card{background:white;border:4px solid #c6e6a8;border-radius:26px;padding:20px;text-align:center;box-shadow:0 8px 14px #0001;transition:.2s;min-height:260px}.card:hover{transform:translateY(-5px);border-color:var(--leaf)}.emoji{font-size:4rem}.btn{border:0;border-radius:18px;padding:13px 22px;background:var(--green);color:white;font-weight:bold;font-size:1.05rem;cursor:pointer;box-shadow:0 4px 0 #1d4f20;margin:6px}.btn:hover{filter:brightness(1.08)}.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #1d4f20}.btn.secondary{background:var(--brown);box-shadow:0 4px 0 #573719}.topbar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px}.score{background:white;border:3px dashed var(--leaf);border-radius:18px;padding:12px 16px;font-weight:bold}.gamebox{background:white;border-radius:26px;border:4px solid #b7d58b;padding:22px;box-shadow:0 8px 16px #0001}.question{font-size:1.45rem;font-weight:bold;margin:10px 0 18px}.answers{display:grid;gap:12px}.answer{background:#f6ffe9;border:3px solid #cce8b2;border-radius:18px;padding:14px;font-size:1.1rem;cursor:pointer;text-align:left}.answer:hover{background:#e8ffd7}.answer.correct{background:var(--right);border-color:#35a853}.answer.wrong{background:var(--wrong);border-color:#d64545}.feedback{min-height:42px;font-size:1.25rem;font-weight:bold;margin:14px 0}.progress{height:18px;background:#e7efd9;border-radius:20px;overflow:hidden;border:2px solid #c7d8aa}.bar{height:100%;width:0;background:linear-gradient(90deg,#8bc34a,#ffd166);transition:.3s}.parts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.drop{min-height:70px;border:3px dashed #a5c783;border-radius:18px;padding:10px;background:#fbfff5;text-align:center;font-weight:bold}.drop.filled{border-style:solid;background:#e9f8dc}.chips{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}.chip{background:#fff1c2;border:3px solid #e0b94f;border-radius:999px;padding:10px 16px;cursor:grab;font-weight:bold}.leaf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}.leafcard{background:#f7fff0;border:3px solid #c9e5b5;border-radius:20px;padding:12px;text-align:center;cursor:pointer}.leafpic{font-size:3.5rem;margin:8px}.small{font-size:.95rem;color:#466}.result{font-size:1.5rem;text-align:center;padding:18px;background:#fff8d8;border-radius:20px;border:3px solid #f0c85a}footer{text-align:center;padding:18px;color:#42683f}
+</style>
+</head>
+<body>
+<header><h1>🌳 Baum-Profi Spiele</h1><p>Entdecke den Aufbau eines Baumes und erkenne Blätter von Laubbäumen!</p></header>
+<main class="wrap">
+<section id="menu" class="screen active"><div class="hero"><h2>Willkommen, Naturforscherin und Naturforscher! 🔎</h2><p>Wähle ein Spiel deiner Wahl aus und sammle mit den richtigen Antworten so viele Punkte wie möglich. Viel Spaß dabei!</p><div class="cards"><div class="card"><div class="emoji">🌲</div><h3>Spiel 1: Baum-Quiz</h3><p>Beantworte Fragen zu Krone, Ästen, Stamm, Rinde, Wurzeln und Ernährung.</p><p><b>Maximal: 8 Punkte</b></p><button class="btn" onclick="startQuiz()">Starten</button></div><div class="card"><div class="emoji">🍃</div><h3>Spiel 2: Blätter erkennen</h3><p>Ordne die Blattform dem richtigen Laubbaum zu.</p><p><b>Maximal: 6 Punkte</b></p><button class="btn" onclick="startLeaves()">Starten</button></div><div class="card"><div class="emoji">🧩</div><h3>Spiel 3: Baumteile zuordnen</h3><p>Ziehe die Begriffe zu ihren Aufgaben.</p><p><b>Maximal: 5 Punkte</b></p><button class="btn" onclick="startDrag()">Starten</button></div></div></div></section>
+<section id="game" class="screen"><div class="topbar"><button class="btn secondary" onclick="goMenu()">⬅ Zur Auswahl</button><div class="score" id="scoreBox"></div></div><div class="progress"><div class="bar" id="bar"></div></div><div class="gamebox" id="gameBox"></div></section>
+</main><footer>🌱 Für die 3. und 4. Klasse Volksschule</footer>
+<script>
+const quiz=[
+ {q:'Welche Aufgabe haben die Wurzeln?',a:['Sie nehmen Wasser und Nährstoffe auf und geben Halt.','Sie machen Eicheln.','Sie schützen nur vor Sonne.','Sie zählen die Jahresringe.'],c:0,info:'Wurzeln saugen Wasser und Nährstoffe aus der Erde und halten den Baum fest.'},
+ {q:'Was ist die Krone eines Baumes?',a:['Äste, Zweige und Blätter','Nur die Rinde','Nur die Wurzeln','Der unterste Teil vom Stamm'],c:0,info:'Die Krone besteht aus Ästen, Zweigen und Blättern.'},
+ {q:'Wozu dient die Rinde?',a:['Sie schützt den Baum wie eine Jacke.','Sie macht Propellerfrüchte.','Sie zählt das Alter.','Sie ist immer weiß.'],c:0,info:'Die Rinde schützt vor Verletzungen, Hitze, Kälte und manchen Tieren.'},
+ {q:'Was transportiert das Leitungssystem im Stamm?',a:['Wasser von den Wurzeln bis in die Blätter','Eicheln in die Erde','Blüten zu den Wurzeln','Luft aus der Krone'],c:0,info:'Im Stamm verlaufen winzige Röhrchen, durch die Wasser transportiert wird.'},
+ {q:'Was entsteht bei der Fotosynthese als Nahrung für den Baum?',a:['Zucker','Steine','Rinde','Jahresringe'],c:0,info:'Mit Sonnenlicht, Wasser und Kohlendioxid entsteht Zucker.'},
+ {q:'Was geben Blätter bei der Fotosynthese an die Luft ab?',a:['Sauerstoff','Sand','Rauch','Eicheln'],c:0,info:'Blätter geben Sauerstoff ab. Menschen und Tiere brauchen ihn zum Atmen.'},
+ {q:'Wie kann man das Alter eines gefällten Baumes herausfinden?',a:['Durch das Zählen der Jahresringe','Durch die Farbe der Blätter','Durch das Messen der Blüten','Durch das Zählen der Wurzeln'],c:0,info:'Jeder Jahresring steht ungefähr für ein Lebensjahr.'},
+ {q:'Warum braucht ein Baum Sonnenlicht?',a:['Damit die Blätter durch Fotosynthese Nahrung herstellen können.','Damit die Wurzeln schlafen.','Damit der Stamm hohl wird.','Damit die Blätter im Frühling abfallen.'],c:0,info:'Sonnenlicht ist wichtig für die Fotosynthese.'}
+];
+const leaves=[
+ {tree:'Eiche',leaf:'gelappt, mit runden Buchten',emoji:'🍂',hint:'Trägt Eicheln'},
+ {tree:'Ahorn',leaf:'meist 5 Spitzen wie eine Hand',emoji:'🍁',hint:'Früchte drehen sich wie kleine Propeller'},
+ {tree:'Buche',leaf:'oval mit leicht gewelltem Rand',emoji:'🌿',hint:'Glatte, graue Rinde'},
+ {tree:'Birke',leaf:'dreieckig und gezackt',emoji:'🍃',hint:'Weiße Rinde'},
+ {tree:'Linde',leaf:'herzförmig',emoji:'💚',hint:'Duftende Blüten im Sommer'},
+ {tree:'Kastanie',leaf:'mehrere Blättchen wie Finger',emoji:'🖐️',hint:'Große Früchte mit stacheliger Schale'}
+];
+const parts=[
+ {term:'Krone',def:'besteht aus Ästen, Zweigen und Blättern'},
+ {term:'Äste',def:'tragen Blätter und Zweige'},
+ {term:'Stamm',def:'hält den Baum aufrecht'},
+ {term:'Rinde',def:'schützt den Baum wie eine Jacke'},
+ {term:'Wurzeln',def:'nehmen Wasser und Nährstoffe auf'}
+];
+let score=0,step=0,max=0;
+let currentQuizOptions=[];
+function shuffleArray(arr){return arr.map(v=>({v,sort:Math.random()})).sort((a,b)=>a.sort-b.sort).map(({v})=>v)}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
+function setScore(){document.getElementById('scoreBox').innerHTML=`Punkte: ${score} / ${max}`;document.getElementById('bar').style.width=(step/max*100)+'%'}
+function goMenu(){show('menu')}
+function endGame(title){document.getElementById('gameBox').innerHTML=`<div class='result'><h2>${title}</h2><p>Du hast <b>${score} von ${max}</b> Punkten erreicht.</p><p>${score===max?'🌟 Spitze! Du bist ein Baum-Profi!':'🌱 Gut gemacht! Übung macht den Baum-Profi.'}</p><button class='btn' onclick='goMenu()'>Zur Spiele-Auswahl</button></div>`;step=max;setScore()}
+function startQuiz(){score=0;step=0;max=quiz.length;show('game');renderQuiz();setScore()}
+function renderQuiz(){if(step>=quiz.length)return endGame('Quiz beendet!');let item=quiz[step];currentQuizOptions=shuffleArray(item.a.map((text,i)=>({text,correct:i===item.c})));document.getElementById('gameBox').innerHTML=`<h2>🌲 Spiel 1: Baum-Quiz</h2><p class='small'>Maximal erreichbare Punkte: ${max}</p><div class='question'>${step+1}. ${item.q}</div><div class='answers'>${currentQuizOptions.map((opt,i)=>`<button class='answer' onclick='answerQuiz(${i})'>${opt.text}</button>`).join('')}</div><div class='feedback' id='fb'></div>`}
+function answerQuiz(i){let item=quiz[step], buttons=[...document.querySelectorAll('.answer')];buttons.forEach(b=>b.disabled=true);let correctIndex=currentQuizOptions.findIndex(opt=>opt.correct);buttons[correctIndex].classList.add('correct');if(currentQuizOptions[i].correct){score++;document.getElementById('fb').innerHTML='✅ Richtig! '+item.info}else{buttons[i].classList.add('wrong');document.getElementById('fb').innerHTML='❌ Nicht ganz. '+item.info}step++;setScore();setTimeout(renderQuiz,2200)}
+function startLeaves(){score=0;step=0;max=leaves.length;show('game');renderLeaves();setScore()}
+function renderLeaves(){if(step>=leaves.length)return endGame('Blätter-Spiel beendet!');let item=leaves[step];let opts=[...leaves.map(l=>l.tree)].sort(()=>Math.random()-.5);document.getElementById('gameBox').innerHTML=`<h2>🍃 Spiel 2: Blätter erkennen</h2><p class='small'>Maximal erreichbare Punkte: ${max}</p><div class='question'>Welcher Baum hat diese Blätter?</div><div class='leafcard'><div class='leafpic'>${item.emoji}</div><b>Blattform:</b> ${item.leaf}<br><span class='small'>Tipp: ${item.hint}</span></div><div class='answers'>${opts.map(x=>`<button class='answer' onclick="answerLeaf('${x.replace("'","\\'")}')">${x}</button>`).join('')}</div><div class='feedback' id='fb'></div>`}
+function answerLeaf(x){let item=leaves[step], buttons=[...document.querySelectorAll('.answer')];buttons.forEach(b=>{b.disabled=true;if(b.textContent===item.tree)b.classList.add('correct');if(b.textContent===x && x!==item.tree)b.classList.add('wrong')});if(x===item.tree){score++;document.getElementById('fb').innerHTML=`✅ Richtig! Das ist die ${item.tree}.`}else{document.getElementById('fb').innerHTML=`❌ Fast! Richtig ist: ${item.tree}.`}step++;setScore();setTimeout(renderLeaves,1900)}
+function startDrag(){score=0;step=0;max=parts.length;show('game');renderDrag();setScore()}
+function renderDrag(){let shuffled=[...parts].sort(()=>Math.random()-.5);document.getElementById('gameBox').innerHTML=`<h2>🧩 Spiel 3: Baumteile zuordnen</h2><p class='small'>Maximal erreichbare Punkte: ${max}. Ziehe jeden Begriff zur passenden Aufgabe.</p><div class='chips'>${shuffled.map(p=>`<div class='chip' draggable='true' id='chip-${p.term}' ondragstart='drag(event)'>${p.term}</div>`).join('')}</div><div class='parts-grid'>${parts.map(p=>`<div class='drop' data-term='${p.term}' ondrop='drop(event)' ondragover='allowDrop(event)'>${p.def}</div>`).join('')}</div><div class='feedback' id='fb'></div><button class='btn' onclick='endGame("Zuordnungs-Spiel beendet!")'>Fertig</button>`;setScore()}
+function allowDrop(ev){ev.preventDefault()} function drag(ev){ev.dataTransfer.setData('text',ev.target.id)}
+function drop(ev){ev.preventDefault();let id=ev.dataTransfer.getData('text');let chip=document.getElementById(id);let term=chip.textContent;let target=ev.currentTarget;if(target.classList.contains('filled'))return;if(target.dataset.term===term){score++;step++;target.classList.add('filled');target.innerHTML='✅ <b>'+term+'</b><br>'+target.textContent;chip.remove();document.getElementById('fb').innerHTML='✅ Richtig zugeordnet!'}else{document.getElementById('fb').innerHTML='❌ Probiere es noch einmal. Lies die Aufgabe genau.'}setScore();if(step===max)setTimeout(()=>endGame('Zuordnungs-Spiel beendet!'),1000)}
+</script>
+</body>
+</html>
